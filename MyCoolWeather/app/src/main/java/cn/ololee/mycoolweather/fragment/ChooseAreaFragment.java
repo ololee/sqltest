@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ololee.mycoolweather.MainActivity;
 import cn.ololee.mycoolweather.R;
 import cn.ololee.mycoolweather.WeatherActivity;
 import cn.ololee.mycoolweather.db.City;
@@ -97,10 +98,19 @@ public class ChooseAreaFragment extends Fragment {
                 else if(currentLevel==LEVEL_COUNTY)
                 {
                     String weatherId=countyList.get(position).getWeatherId();
-                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if(getActivity() instanceof MainActivity)
+                    {
+                        Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof  WeatherActivity){
+                        WeatherActivity weatherActivity= (WeatherActivity) getActivity();
+                        weatherActivity.drawerLayout.closeDrawers();
+                        weatherActivity.swipeRefreshLayout.setRefreshing(false);
+                        weatherActivity.requestWeaather(weatherId);
+                    }
+
                 }
             }
         });
