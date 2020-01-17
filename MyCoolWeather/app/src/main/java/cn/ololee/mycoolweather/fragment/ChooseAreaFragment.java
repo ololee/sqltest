@@ -1,6 +1,7 @@
 package cn.ololee.mycoolweather.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,9 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ololee.mycoolweather.R;
+import cn.ololee.mycoolweather.WeatherActivity;
 import cn.ololee.mycoolweather.db.City;
 import cn.ololee.mycoolweather.db.County;
 import cn.ololee.mycoolweather.db.Province;
+import cn.ololee.mycoolweather.gson.Weather;
 import cn.ololee.mycoolweather.util.HttpUtil;
 import cn.ololee.mycoolweather.util.Utility;
 import okhttp3.Call;
@@ -90,6 +93,14 @@ public class ChooseAreaFragment extends Fragment {
                 {
                     selectedCity=cityList.get(position);
                     queryCounties();
+                }
+                else if(currentLevel==LEVEL_COUNTY)
+                {
+                    String weatherId=countyList.get(position).getWeatherId();
+                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });

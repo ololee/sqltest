@@ -1,6 +1,9 @@
 package cn.ololee.mycoolweather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +11,7 @@ import org.json.JSONObject;
 import cn.ololee.mycoolweather.db.City;
 import cn.ololee.mycoolweather.db.County;
 import cn.ololee.mycoolweather.db.Province;
+import cn.ololee.mycoolweather.gson.Weather;
 
 public class Utility {
     /*
@@ -83,5 +87,25 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    /*
+    * 处理天气返回的信息
+    * 将返回的JSON数据类解析成Weather对象
+    * */
+
+    public static Weather handleWeatherResponse(String response)
+    {
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            Log.d("Weather","handleWeatherResponse"+weatherContent);
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
