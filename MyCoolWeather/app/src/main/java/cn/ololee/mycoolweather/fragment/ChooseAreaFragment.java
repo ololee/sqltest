@@ -2,7 +2,9 @@ package cn.ololee.mycoolweather.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -69,7 +71,6 @@ public class ChooseAreaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("ololeeTag","onCreateView");
         View view=inflater.inflate(R.layout.choose_area,container,false);
         titleText=view.findViewById(R.id.title_text);
         backButton=view.findViewById(R.id.back_button);
@@ -110,7 +111,9 @@ public class ChooseAreaFragment extends Fragment {
                         weatherActivity.swipeRefreshLayout.setRefreshing(false);
                         weatherActivity.requestWeaather(weatherId);
                     }
-
+                    SharedPreferences.Editor editor=PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+                    editor.putString("weather_id",weatherId);
+                    editor.apply();
                 }
             }
         });

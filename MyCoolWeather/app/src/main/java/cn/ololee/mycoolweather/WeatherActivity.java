@@ -1,5 +1,6 @@
 package cn.ololee.mycoolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -25,6 +26,7 @@ import java.io.IOException;
 
 import cn.ololee.mycoolweather.gson.Forecast;
 import cn.ololee.mycoolweather.gson.Weather;
+import cn.ololee.mycoolweather.service.AutoUpdateService;
 import cn.ololee.mycoolweather.util.HttpUtil;
 import cn.ololee.mycoolweather.util.Utility;
 import okhttp3.Call;
@@ -177,8 +179,8 @@ public class WeatherActivity extends AppCompatActivity {
             TextView minText=view.findViewById(R.id.min_text);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
-            maxText.setText(forecast.temperature.max);
-            minText.setText(forecast.temperature.min);
+            maxText.setText(forecast.temperature.max+"℃");
+            minText.setText(forecast.temperature.min+"℃");
             forecastLayout.addView(view);
         }
         if(weather.aqi!=null)
@@ -193,6 +195,12 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        if(weather!=null&&weather.status.equals("ok")){
+            Intent intent=new Intent(this,AutoUpdateService.class);
+            startService(intent);
+        }else {
+            Toast.makeText(getApplicationContext(),"获取天气信息失败",Toast.LENGTH_LONG).show();
+        }
     }
 
     /*
